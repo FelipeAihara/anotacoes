@@ -246,6 +246,16 @@ Resposta calculada para $f_c = 20$ Hz (padrão do ArduCopter) e $f_s = 2$ kHz:
 | 80     | −24,2 dB        | −159°   | 0,8 ms          | −12,5 dB        | −69°   |
 | 160    | −36,5 dB        | −170°   | 0,2 ms          | −18,3 dB        | −69°   |
 
+![Resposta em frequência do Butterworth de 2ª ordem e do filtro de 1ª ordem, fc = 20 Hz](img/butterworth-bode.svg)
+
+O mesmo em gráfico (diagrama de Bode e atraso de grupo). Dois detalhes que a tabela não mostra:
+
+* O atraso de grupo do biquad não é constante: tem um pico de ~13,6 ms perto de 13 Hz, logo abaixo do
+  corte, e cai rápido acima dele.
+* O ganho do biquad despenca perto de 1 kHz por causa dos zeros em $z = -1$ (Nyquist). O 1ª ordem,
+  discretizado por Euler implícito, não tem esse zero: o ganho estaciona em
+  $\alpha/(2-\alpha) \approx -30$ dB e a fase volta a 0° em Nyquist.
+
 O que a tabela mostra:
 
 * O 2ª ordem cai **−12 dB/oitava** (−40 dB/década) contra −6 dB/oitava do 1ª ordem: a 160 Hz atenua
@@ -257,6 +267,14 @@ O que a tabela mostra:
   limpa o ruído, mas obriga a reduzir P e D. Quadricópteros pequenos (hélices de 3–5″), que têm dinâmica
   rápida e ruído em frequências mais altas, usam cortes de 60–100+ Hz; frames grandes ficam próximos de
   20–40 Hz. A tela *Initial Parameters* do Mission Planner sugere um valor a partir do diâmetro da hélice.
+
+![Butterworth de 2ª ordem com fc = 20, 40 e 80 Hz](img/butterworth-cortes.svg)
+
+O gráfico acima mostra esse compromisso: dobrar o corte de 20 para 40 Hz reduz a fase a 10 Hz de −43° para
+−21°, mas a atenuação a 200 Hz cai de −41 dB para −29 dB.
+
+Os gráficos são gerados por `scripts/graficos_butterworth.py`, que usa as mesmas fórmulas de coeficientes
+do ArduPilot mostradas nas seções 3 e 5.
 
 ## 7. Outras coisas relevantes
 
