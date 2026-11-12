@@ -15,8 +15,8 @@ gira em torno desse compromisso.
 ## 2. O caminho do sinal no Pixhawk 6C
 
 O Pixhawk 6C usa um STM32H743 (Cortex-M7 a 480 MHz) e, nas revisões comuns, duas IMUs:
-ICM-42688-P e BMI055 (revisões mais recentes trocam a segunda IMU; confira a sua com `INS_GYR_ID`/
-`INS_GYR2_ID`). Simplificando, o caminho de um sinal de giroscópio no ArduCopter é:
+ICM-42688-P e BMI055 (revisões mais recentes trocam a segunda IMU; confira a sua com
+`INS_GYR_ID`/`INS_GYR2_ID`). Simplificando, o caminho de um sinal de giroscópio no ArduCopter é:
 
 ```
 sensor MEMS (filtro anti-aliasing interno, amostragem de kHz)
@@ -113,7 +113,7 @@ $$
 O Butterworth de ordem *n* é definido como o filtro "maximamente plano": a resposta em magnitude
 $|H(j\omega)|^2 = 1/(1 + (\omega/\omega_c)^{2n})$ tem as primeiras $2n-1$ derivadas nulas em
 $\omega = 0$. Os polos de $H(s)H(-s)$ ficam igualmente espaçados sobre um círculo de raio $\omega_c$;
-tomando os do semiplano esquerdo para $n = 2$, $s = \omega_c e^{\pm j 3\pi/4}$, obtém-se
+tomando os do semiplano esquerdo para $n = 2$ ($s = \omega_c e^{\pm j 3\pi/4}$), obtém-se
 
 $$
 H_a(s) = \frac{\omega_c^2}{s^2 + \sqrt{2}\,\omega_c\, s + \omega_c^2},
@@ -225,9 +225,9 @@ y_n = y_{n-1} + \underbrace{\frac{T}{T + RC}}_{\alpha}\,(x_n - y_{n-1}).
 $$
 
 Daí o `alpha = dt/(dt+rc)`. A solução exata (invariância ao degrau / ZOH) daria
-$\alpha = 1 - e^{-T/RC}$; para $T \ll RC$ as duas coincidem em primeira ordem
+$\alpha = 1 - e^{-T/RC}$; para $T \ll RC$, as duas coincidem em primeira ordem
 ($1 - e^{-\varepsilon} \approx \varepsilon/(1+\varepsilon)$ até $O(\varepsilon^2)$). A vantagem prática do
-Euler implícito é ser incondicionalmente estável e barato, e de aceitar um `dt` variável a cada chamada
+Euler implícito é ser incondicionalmente estável e barato, além de aceitar um `dt` variável a cada chamada
 — útil porque o loop não tem período perfeitamente constante.
 
 Em termos de $z$: $H(z) = \alpha / (1 - (1-\alpha) z^{-1})$, um único polo real em $z = 1 - \alpha$.
@@ -254,7 +254,7 @@ O que a tabela mostra:
   $\tau \approx \sqrt2/(2\pi f_c) \approx 11$ ms. Esse atraso entra diretamente na malha de controle de
   taxa e consome margem de fase: a 10 Hz já são −43°.
 * Por isso, subir `INS_GYRO_FILTER` deixa o controle mais "afiado" (permite ganhos maiores), e baixá-lo
-  limpa o ruído mas obriga a reduzir P e D. Quadricópteros pequenos (hélices de 3–5″), que têm dinâmica
+  limpa o ruído, mas obriga a reduzir P e D. Quadricópteros pequenos (hélices de 3–5″), que têm dinâmica
   rápida e ruído em frequências mais altas, usam cortes de 60–100+ Hz; frames grandes ficam próximos de
   20–40 Hz. A tela *Initial Parameters* do Mission Planner sugere um valor a partir do diâmetro da hélice.
 
@@ -262,7 +262,7 @@ O que a tabela mostra:
 
 **Notch harmônico vem antes do passa-baixas e é mais eficiente que ele.** O ruído de um multirotor é
 concentrado na frequência de rotação dos motores e suas harmônicas. Um notch rastreando essa frequência
-(`INS_HNTCH_MODE`: throttle, RPM via telemetria BDShot/ESC, ou FFT embarcada) remove o pico com muito
+(`INS_HNTCH_MODE`: throttle, RPM via telemetria BDShot/ESC ou FFT embarcada) remove o pico com muito
 menos atraso de fase na banda de controle do que baixar o passa-baixas. A prática recomendada é:
 configure o notch primeiro, depois suba o `INS_GYRO_FILTER` o quanto o ruído residual permitir.
 O notch também é um biquad derivado por transformação bilinear, com outra função de transferência
@@ -275,8 +275,8 @@ $2\pi f$, então o D é sempre a primeira vítima de vibração.
 
 **Acelerômetro.** `INS_ACCEL_FILTER` (padrão 20 Hz) usa o mesmo biquad. O EKF3 consome as amostras já
 filtradas/integradas (delta-ângulos e delta-velocidades) e tem seu próprio tratamento de ruído, então
-mexer nesse parâmetro afeta pouco a estimação de atitude, mas importa para o controle de altitude/
-aceleração vertical.
+mexer nesse parâmetro afeta pouco a estimação de atitude, mas importa para o controle de
+altitude/aceleração vertical.
 
 **Anti-aliasing no sensor.** O ICM-42688-P tem um filtro anti-aliasing interno configurado pelo driver.
 Nenhum filtro digital no FC consegue desfazer aliasing que já aconteceu no ADC — por isso montar a
@@ -289,7 +289,7 @@ Planner ou o *Filter Review Tool* web do ArduPilot. Ela plota o espectro e a res
 configurados, incluindo o atraso de fase total — que é o número que realmente importa para o tuning.
 
 **Custo computacional.** Cada biquad custa 5 multiplicações e 4 somas por amostra por eixo. A 8 kHz,
-três eixos, com vários notches, isso já é relevante; é uma das razões de o H7 do 6C (com FPU de precisão
+em três eixos e com vários notches, isso já é relevante; é uma das razões de o H7 do 6C (com FPU de precisão
 simples) suportar *fast sampling* completo enquanto controladoras F4 antigas eram limitadas.
 
 ## 8. Resumo
