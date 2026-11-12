@@ -116,7 +116,7 @@ $\omega = 0$. Os polos de $H(s)H(-s)$ ficam igualmente espaçados sobre um círc
 tomando os do semiplano esquerdo para $n = 2$ ($s = \omega_c e^{\pm j 3\pi/4}$), obtém-se
 
 $$
-H_a(s) = \frac{\omega_c^2}{s^2 + \sqrt{2}\,\omega_c\, s + \omega_c^2},
+H_a(s) = \frac{\omega_c^2}{s^2 + \sqrt{2}\thinspace \omega_c\thinspace  s + \omega_c^2},
 $$
 
 isto é, um sistema de 2ª ordem com $\omega_n = \omega_c$ e $\zeta = 1/\sqrt{2} \approx 0{,}707$.
@@ -128,14 +128,14 @@ Para levar $H_a(s)$ ao tempo discreto com período $T = 1/f_s$, usa-se a transfo
 (Tustin), que vem de aproximar a integral pela regra do trapézio:
 
 $$
-s \;\leftarrow\; \frac{2}{T}\,\frac{1 - z^{-1}}{1 + z^{-1}}.
+s \thickspace \leftarrow\thickspace  \frac{2}{T}\thinspace \frac{1 - z^{-1}}{1 + z^{-1}}.
 $$
 
 Ela mapeia todo o eixo $j\omega$ analógico sobre o círculo unitário (logo, preserva estabilidade e não
 causa aliasing do filtro), mas comprime as frequências de forma não linear:
 
 $$
-\omega_a = \frac{2}{T}\tan\!\left(\frac{\omega_d T}{2}\right).
+\omega_a = \frac{2}{T}\tan\negthinspace \left(\frac{\omega_d T}{2}\right).
 $$
 
 ### 4.3 Pré-distorção (*prewarping*)
@@ -144,23 +144,23 @@ Para que o corte digital caia exatamente em $f_c$, projeta-se o protótipo anal�
 pré-distorcida $\omega_a = \frac{2}{T}\tan(\pi f_c / f_s)$. Definindo
 
 $$
-K \equiv \tan\!\left(\frac{\pi f_c}{f_s}\right) \quad(\texttt{ohm}\text{ no código}),
+K \equiv \tan\negthinspace \left(\frac{\pi f_c}{f_s}\right) \quad(\texttt{ohm}\text{ no código}),
 $$
 
 a substituição fica particularmente limpa, porque os fatores $2/T$ se cancelam:
 
 $$
-\frac{s}{\omega_a} = \frac{1}{K}\,\frac{1 - z^{-1}}{1 + z^{-1}}.
+\frac{s}{\omega_a} = \frac{1}{K}\thinspace \frac{1 - z^{-1}}{1 + z^{-1}}.
 $$
 
 ### 4.4 Álgebra
 
-Escrevendo $H_a$ na forma normalizada $H_a = 1/\big((s/\omega_a)^2 + \sqrt2\,(s/\omega_a) + 1\big)$,
+Escrevendo $H_a$ na forma normalizada $H_a = 1/\big((s/\omega_a)^2 + \sqrt2\thinspace (s/\omega_a) + 1\big)$,
 substituindo e multiplicando numerador e denominador por $K^2(1+z^{-1})^2$:
 
 $$
 H(z) = \frac{K^2 (1 + z^{-1})^2}
-{(1 - z^{-1})^2 + \sqrt{2}\,K\,(1 - z^{-1})(1 + z^{-1}) + K^2 (1 + z^{-1})^2}.
+{(1 - z^{-1})^2 + \sqrt{2}\thinspace K\thinspace (1 - z^{-1})(1 + z^{-1}) + K^2 (1 + z^{-1})^2}.
 $$
 
 Expandindo o denominador por potências de $z^{-1}$:
@@ -213,15 +213,15 @@ _output += (sample - _output) * alpha;
 É o circuito RC discretizado. A EDO é
 
 $$
-RC\,\dot y(t) + y(t) = x(t), \qquad RC = \frac{1}{2\pi f_c}.
+RC\thinspace \dot y(t) + y(t) = x(t), \qquad RC = \frac{1}{2\pi f_c}.
 $$
 
 Aplicando **Euler implícito** (diferença para trás), $\dot y \approx (y_n - y_{n-1})/T$:
 
 $$
-RC\,\frac{y_n - y_{n-1}}{T} + y_n = x_n
-\;\Longrightarrow\;
-y_n = y_{n-1} + \underbrace{\frac{T}{T + RC}}_{\alpha}\,(x_n - y_{n-1}).
+RC\thinspace \frac{y_n - y_{n-1}}{T} + y_n = x_n
+\thickspace \Longrightarrow\thickspace 
+y_n = y_{n-1} + \underbrace{\frac{T}{T + RC}}_{\alpha}\thinspace (x_n - y_{n-1}).
 $$
 
 Daí o `alpha = dt/(dt+rc)`. A solução exata (invariância ao degrau / ZOH) daria
