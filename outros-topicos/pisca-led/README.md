@@ -13,3 +13,8 @@ Caso você queira acompanhar esse ensaio, os seguintes materiais e software ser�
 - [ ] ST Link V2 
 
 ## Como o código "pisca LED" realmente funciona?
+
+Para entender como fazer o LED da Blackpill piscar, é necessário primeiro entender o que o seu núcleo (o Cortex-M4) faz. No reset, ele simplesmente:
+
+1. Lê a palavra 0 da memória e copia para o SP (ponteiro de pilha)
+2. 
